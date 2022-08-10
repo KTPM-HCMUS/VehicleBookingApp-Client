@@ -31,7 +31,6 @@ import java.util.Calendar;
 public class RegisterActivity extends AppCompatActivity {
     EditText birthDateEditText, usernameEditText, phoneEditText, registerVehiclePlateNumberEditText;
     Button backBtn, nextBtn, datePickerBtn;
-    RadioButton maleRadioBtn, femaleRadioBtn;
     RadioGroup roleGroup;
     RadioButton driverRadioBtn, customerRadioBtn;
     RadioGroup transportationTypeGroup;
@@ -108,7 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String phone = phoneEditText.getText().toString();
                 String birthDate = birthDateEditText.getText().toString();
-                String gender = maleRadioBtn.isChecked() ? "Male" : "Female";
                 String role = customerRadioBtn.isChecked() ? "Customer" : "Driver";
                 String transportationType = "";
                 if (driverRadioBtn.isChecked()) {
