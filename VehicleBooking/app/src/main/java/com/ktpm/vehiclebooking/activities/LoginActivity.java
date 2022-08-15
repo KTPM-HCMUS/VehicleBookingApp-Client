@@ -5,21 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import com.ktpm.vehiclebooking.Constants;
 import com.ktpm.vehiclebooking.R;
+import com.ktpm.vehiclebooking.api.LoginAPI;
+import com.ktpm.vehiclebooking.database.DBHandler;
+import com.ktpm.vehiclebooking.model.LoginModel;
+import com.ktpm.vehiclebooking.model.ResponseTT;
+import com.ktpm.vehiclebooking.model.Result;
+import com.ktpm.vehiclebooking.model.UserPayload;
+import com.ktpm.vehiclebooking.model.UserTemp;
+import com.ktpm.vehiclebooking.utilities.JWTUtils;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
-    Button backBtn, loginBtn;
-    EditText emailEditText, passwordEditText;
+    Button loginBtn;
+    EditText phoneEditText, passwordEditText;
     TextView moveToRegister;
+    private DBHandler handler = new DBHandler(LoginActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private void linkViewElements() {
 //        backBtn = findViewById(R.id.loginBackBtn);
         loginBtn = findViewById(R.id.loginLoginBtn);
-        emailEditText = findViewById(R.id.loginEmailEditText);
+        phoneEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
         moveToRegister = findViewById(R.id.moveToRegisterTextView);
     }
@@ -45,25 +57,119 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = emailEditText.getText().toString();
+                final String phone = phoneEditText.getText().toString();
                 final String password = passwordEditText.getText().toString();
 
                 //Check if the input email or password is empty
-                if (email.isEmpty() || password.isEmpty()) {
+                if (phone.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, Constants.ToastMessage.emptyInputError,
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-                // Auth instance
+                LoginWithUserIdAndPassword(phone, password);
             }
         });
+    }
+
+    private void LoginWithUserIdAndPassword(String phoneNumber, String password){
+        LoginModel driver = new LoginModel(phoneNumber, password);
+        LoginAPI.apiService.loginDriver(driver).enqueue(new Callback<ResponseTT>() {
+            @Override
+            public void onResponse(Call<ResponseTT> call, Response<ResponseTT> response) {
+                success(response);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseTT> call, Throwable t) {
+                failure();
+            }
+        });
+    }
+    private void loginWithToken(){
+        ArrayList<String> s = handler.readDB();
+        if(s.size() != 0){
+            checkLogin(handler.readDB().get(1));
+        }
+    }
+
+    private void checkLogin(String token){
+        LoginAPI.apiService.revokeToken("Bearer " + token).enqueue(new Callback<ResponseTT>() {
+            @Override
+            public void onResponse(Call<ResponseTT> call, Response<ResponseTT> response) {
+                success(response);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseTT> call, Throwable t) {
+                failure();
+            }
+        });
+    }
+
+
+    private void getRefreshToken(String userId){
+        ArrayList<String> list = handler.readDB();
+        String refreshToken = list.get(0);
+        UserTemp userTemp = new UserTemp(userId, refreshToken);
+        LoginAPI.apiService.getNewToken(userTemp).enqueue(new Callback<ResponseTT>() {
+            @Override
+            public void onResponse(Call<ResponseTT> call, Response<ResponseTT> response) {
+                success(response);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseTT> call, Throwable t) {
+                failure();
+            }
+        });
+
+    }
+
+
+
+    private void success(Response<ResponseTT> response){
+        ArrayList<String> s = handler.readDB();
+        UserPayload userPayload = JWTUtils.parseTokenToGetDriver(response.body().getResult().getToken());
+        try {
+            String isValid = response.body().getResult().getLoginError();
+            String refreshToken = response.body().getResult().getRefreshToken();
+            String token = response.body().getResult().getToken();
+            if(isValid.equals("SUCCESS")){
+                writeDB(refreshToken, token, isValid);
+                Toast.makeText(LoginActivity.this, Constants.ToastMessage.signInSuccess,
+                        Toast.LENGTH_SHORT).show();
+                moveToHomePage();
+            }else{
+                if(s.size() != 0){
+                    getRefreshToken(userPayload.getUserID());
+                }
+                Toast.makeText(LoginActivity.this, Constants.ToastMessage.signInFailure,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }catch (Exception e){
+            getRefreshToken(userPayload.getUserID());
+        }
+
+    }
+
+    private void failure(){
+        Toast.makeText(LoginActivity.this, "Login failure!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void writeDB(String refreshToken, String token, String isValid){
+        Result result = new Result(refreshToken, token, isValid);
+        ArrayList<String> s  = handler.readDB();
+        if(s.size()==0){
+            handler.addNewToken(refreshToken, token);
+        }else{
+            handler.update(refreshToken, token);
+        }
     }
 
     //Move to user's homepage if successfully logged in
     private void moveToHomePage() {
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
-        i.putExtra("email", emailEditText.getText().toString());
+        i.putExtra("email", phoneEditText.getText().toString());
         startActivity(i);
         finish();
     }

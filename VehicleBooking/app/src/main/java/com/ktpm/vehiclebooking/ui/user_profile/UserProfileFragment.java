@@ -60,8 +60,6 @@ public class UserProfileFragment extends Fragment {
     private EditText emailEditText;
     private EditText phoneEditText;
     private EditText dateOfBirthEditText;
-    private RadioButton maleRadioBtn;
-    private RadioButton femaleRadioBtn;
     private Button updateBtn;
     private Button pickerBtn;
     private Button changePassBtn;
@@ -74,8 +72,6 @@ public class UserProfileFragment extends Fragment {
         emailEditText = rootView.findViewById(R.id.editText_email);
         phoneEditText = rootView.findViewById(R.id.editText_phone);
         dateOfBirthEditText = rootView.findViewById(R.id.editText_DOB);
-        maleRadioBtn = rootView.findViewById(R.id.radioButton_genderMale);
-        femaleRadioBtn = rootView.findViewById(R.id.radioButton_genderFemale);
         updateBtn = rootView.findViewById(R.id.btn_updateProfle);
         pickerBtn = rootView.findViewById(R.id.btn_pickDate);
         changePassBtn = rootView.findViewById(R.id.btn_changePass);
@@ -248,8 +244,6 @@ public class UserProfileFragment extends Fragment {
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String gender = maleRadioBtn.isChecked() ? "Male" : "Female";
-
                 String[] splitBirthDateStr = dateOfBirthEditText.getText().toString().split("/");
                 int day = Integer.parseInt(splitBirthDateStr[0]);
                 int month = Integer.parseInt(splitBirthDateStr[1]);
