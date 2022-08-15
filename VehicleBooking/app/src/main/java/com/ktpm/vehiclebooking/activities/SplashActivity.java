@@ -6,12 +6,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.ktpm.vehiclebooking.LocationOuterClass;
 import com.ktpm.vehiclebooking.R;
+import com.ktpm.vehiclebooking.model.LocationStreamingClient;
+
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Loading screen activity
  */
 public class SplashActivity extends AppCompatActivity {
+    private static final String TAG = "SplashActivity";
 
     Handler handler;
     @Override
@@ -29,5 +37,50 @@ public class SplashActivity extends AppCompatActivity {
             }
         },3000);
 
+//        Thread thread = new Thread(() -> {
+//            LocationStreamingClient client = new LocationStreamingClient();
+//            ExecutorService sendDriverLocationExecutor = Executors.newSingleThreadExecutor();
+//            ExecutorService getLocationExecutor = Executors.newSingleThreadExecutor();
+//            ExecutorService sendCustomerLocationExecutor = Executors.newSingleThreadExecutor();
+//
+//            client.sendLocation("customer_test", () -> {
+//                Random rd = new Random();
+//                return LocationOuterClass.Location.newBuilder()
+//                        .setLatitude(rd.nextDouble())
+//                        .setLongitude(rd.nextDouble())
+//                        .build();
+//            }, sendCustomerLocationExecutor);
+//            client.sendLocation("driver_test", () -> {
+//                Random rd = new Random();
+//                return LocationOuterClass.Location.newBuilder()
+//                        .setLatitude(rd.nextDouble())
+//                        .setLongitude(rd.nextDouble())
+//                        .build();
+//            }, sendDriverLocationExecutor);
+//            client.getLocation("customer_test", "driver_test", response -> {
+//                System.out.println("======================================");
+//                System.out.println(Thread.currentThread().getName());
+//                System.out.println("customer_test latitude=" + response.getCustomerLocation().getLatitude() + ", longitude=" + response.getCustomerLocation().getLongitude());
+//                System.out.println("driver_test location=" + response.getDriverLocation().getLatitude() + ", longitude=" + response.getDriverLocation().getLongitude());
+//                System.out.println("======================================");
+//            }, getLocationExecutor);
+//            CountDownLatch countDownLatch = new CountDownLatch(1);
+//            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//                sendCustomerLocationExecutor.shutdown();
+//                sendDriverLocationExecutor.shutdown();
+//                getLocationExecutor.shutdown();
+//                countDownLatch.countDown();
+//            }));
+//            try {
+//                countDownLatch.await();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        thread.start();
+//        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//            thread.stop();
+//        }));
     }
 }
