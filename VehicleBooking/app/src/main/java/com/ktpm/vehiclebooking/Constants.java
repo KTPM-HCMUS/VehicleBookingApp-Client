@@ -3,8 +3,8 @@ package com.ktpm.vehiclebooking;
 public class Constants {
     public static class Transportation{
         public static class Type {
-            public static final String carType = "car";
-            public static final String bikeType = "bike";
+            public static final int carType = 2;
+            public static final int bikeType = 1;
         }
 
         public static class UnitPrice {
@@ -13,9 +13,7 @@ public class Constants {
         }
     }
 
-    //Fields of FireStore 'users' collection
     public static class FSUser {
-        public static final String userCollection = "users";
         public static final String usernameField = "username";
         public static final String phoneField = "phone";
         public static final String birthDateField = "birthDate";
@@ -23,13 +21,9 @@ public class Constants {
         public static final String roleField = "role";
         public static final String transportationType = "transportationType";
         public static final String vehiclePlateNumber = "vehiclePlateNumber";
-        public static final String rating = "rating";
-        public static final String currentPositionLatitude = "currentPositionLatitude";
-        public static final String currentPositionLongitude = "currentPositionLongitude";
 
-
-        public static final String roleCustomerVal = "Customer";
-        public static final String roleDriverVal = "Driver";
+        public static final int roleDriverVal = 1;
+        public static final int roleCustomerVal = 2;
     }
 
     public static class FSBooking {
@@ -65,8 +59,8 @@ public class Constants {
         public static final String emptyInputError = "Please fill in your account authentication.";
         public static final String signInSuccess = "Sign in successfully!";
         public static final String signInFailure = "Invalid account!";
-        public static final String registerSuccess = "Successfully registered";
-        public static final String registerFailure = "Authentication failed, email must be unique and has correct form!";
+        public static final String registerSuccess = "Successfully registered!";
+        public static final String registerFailure = "Register failed!";
         public static final String retrieveUsersInfoFailure = "Error querying for all users' information!";
         public static final String emptyMessageInputError = "Please type your message to send!";
 

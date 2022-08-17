@@ -46,14 +46,14 @@
             android:padding="10dp" />
 
         <EditText
-            android:id="@+id/registerPhoneEditText"
+            android:id="@+id/registerEmailEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20sp"
             android:background="#FFFFFF"
             android:ems="10"
-            android:hint="Phone number"
-            android:inputType="phone"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
             android:padding="10sp" />
 
 

@@ -147,29 +147,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="0"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/radioButton_genderMale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Male" />
-
-                    <RadioButton
-                        android:id="@+id/radioButton_genderFemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Female" />
-
-                </RadioGroup>
-
                 <Button
                     android:id="@+id/btn_updateProfle"
                     android:layout_width="wrap_content"

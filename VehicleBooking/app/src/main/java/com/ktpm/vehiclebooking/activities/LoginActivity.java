@@ -1,11 +1,9 @@
 package com.ktpm.vehiclebooking.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +19,7 @@ import com.ktpm.vehiclebooking.database.DBHandler;
 import com.ktpm.vehiclebooking.model.LoginModel;
 import com.ktpm.vehiclebooking.model.ResponseTT;
 import com.ktpm.vehiclebooking.model.Result;
-import com.ktpm.vehiclebooking.model.UserPayload;
+import com.ktpm.vehiclebooking.model.User;
 import com.ktpm.vehiclebooking.model.UserTemp;
 import com.ktpm.vehiclebooking.utilities.JWTUtils;
 
@@ -70,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void LoginWithUserIdAndPassword(String phoneNumber, String password){
         LoginModel driver = new LoginModel(phoneNumber, password);
-        LoginAPI.apiService.loginDriver(driver).enqueue(new Callback<ResponseTT>() {
+        LoginAPI.apiService.login(driver).enqueue(new Callback<ResponseTT>() {
             @Override
             public void onResponse(Call<ResponseTT> call, Response<ResponseTT> response) {
                 success(response);
@@ -125,10 +123,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void success(Response<ResponseTT> response){
-        System.out.println("aaaaaa");
         ArrayList<String> s = handler.readDB();
-        UserPayload userPayload = JWTUtils.parseTokenToGetDriver(response.body().getResult().getToken());
-        System.out.println(userPayload);
+        User user = JWTUtils.parseTokenToGetUser(response.body().getResult().getToken());
         try {
             String isValid = response.body().getResult().getLoginError();
             String refreshToken = response.body().getResult().getRefreshToken();
@@ -140,13 +136,13 @@ public class LoginActivity extends AppCompatActivity {
                 moveToHomePage();
             }else{
                 if(s.size() != 0){
-                    getRefreshToken(userPayload.getUserID());
+                    getRefreshToken(user.getUserID());
                 }
                 Toast.makeText(LoginActivity.this, Constants.ToastMessage.signInFailure,
                         Toast.LENGTH_SHORT).show();
             }
         }catch (Exception e){
-            getRefreshToken(userPayload.getUserID());
+            getRefreshToken(user.getUserID());
         }
 
     }
@@ -180,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
+                loginWithToken();
                 finish();
             }
         });

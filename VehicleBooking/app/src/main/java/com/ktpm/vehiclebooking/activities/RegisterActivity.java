@@ -29,13 +29,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText birthDateEditText, usernameEditText, phoneEditText, registerVehiclePlateNumberEditText;
+    EditText birthDateEditText, usernameEditText, emailEditText, registerVehiclePlateNumberEditText;
     Button backBtn, nextBtn, datePickerBtn;
     RadioGroup roleGroup;
     RadioButton driverRadioBtn, customerRadioBtn;
     RadioGroup transportationTypeGroup;
     RadioButton registerCarRadioBtn, registerBikeRadioBtn;
     private int year, month, day;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void linkViewElements() {
         birthDateEditText = (EditText) findViewById(R.id.registerBirthEditText);
         usernameEditText = (EditText) findViewById(R.id.registerUsernameEditText);
-        phoneEditText = (EditText) findViewById(R.id.registerPhoneEditText);
+        emailEditText = (EditText) findViewById(R.id.registerEmailEditText);
         backBtn = (Button) findViewById(R.id.registerBackBtn);
         nextBtn = (Button) findViewById(R.id.registerFinalRegisterBtn);
         datePickerBtn = (Button) findViewById(R.id.registerPickdateBtn);
@@ -105,39 +106,66 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString();
-                String phone = phoneEditText.getText().toString();
+                String email = emailEditText.getText().toString();
                 String birthDate = birthDateEditText.getText().toString();
-                String role = customerRadioBtn.isChecked() ? "Customer" : "Driver";
-                String transportationType = "";
+                int role = customerRadioBtn.isChecked() ? 2 : 1;
+                int transportationType = 0;
+                String vehiclePlateNumber = "";
                 if (driverRadioBtn.isChecked()) {
-                    transportationType = registerCarRadioBtn.isChecked() ? "car" : "bike";
+                    transportationType = registerCarRadioBtn.isChecked() ?  2 : 1;
+                    vehiclePlateNumber = registerVehiclePlateNumberEditText.getText().toString();
                 }
-                String vehiclePlateNumber = registerVehiclePlateNumberEditText.getText().toString();
-
-                //Check empty input
-                if (checkEmptyInput(username, phone, birthDate)) {
-                    Toast.makeText(RegisterActivity.this, Constants.ToastMessage.emptyInputError, Toast.LENGTH_SHORT).show();
-                } else {
-                    //Transfer data
-                    Intent i = new Intent(RegisterActivity.this, RegisterFinalActivity.class);
-                    i.putExtra(Constants.FSUser.usernameField, username);
-                    i.putExtra(Constants.FSUser.phoneField, phone);
-                    i.putExtra(Constants.FSUser.birthDateField, birthDate);
-                    i.putExtra(Constants.FSUser.roleField, role);
-                    i.putExtra(Constants.FSUser.transportationType, transportationType);
-                    i.putExtra(Constants.FSUser.vehiclePlateNumber, vehiclePlateNumber);
-                    startActivity(i);
-                    finish();
+                System.out.println(username);
+                System.out.println(email);
+                System.out.println(birthDate);
+                System.out.println(role);
+                System.out.println(transportationType);
+                System.out.println(vehiclePlateNumber);
+                if (customerRadioBtn.isChecked()){
+                    if (checkEmptyInputClient(username, email, birthDate)) {
+                        System.out.println("aaaaaaa");
+                        Toast.makeText(RegisterActivity.this, Constants.ToastMessage.emptyInputError, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent i = new Intent(RegisterActivity.this, RegisterFinalActivity.class);
+                        i.putExtra(Constants.FSUser.usernameField, username);
+                        i.putExtra(Constants.FSUser.emailField, email);
+                        i.putExtra(Constants.FSUser.birthDateField, birthDate);
+                        i.putExtra(Constants.FSUser.roleField, role);
+                        i.putExtra(Constants.FSUser.transportationType, transportationType);
+                        i.putExtra(Constants.FSUser.vehiclePlateNumber, vehiclePlateNumber);
+                        startActivity(i);
+                        finish();
+                    }
+                }
+                else {
+                    if (checkEmptyInputDriver(username, email, birthDate, vehiclePlateNumber)) {
+                        Toast.makeText(RegisterActivity.this, Constants.ToastMessage.emptyInputError, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent i = new Intent(RegisterActivity.this, RegisterFinalActivity.class);
+                        i.putExtra(Constants.FSUser.usernameField, username);
+                        i.putExtra(Constants.FSUser.emailField, email);
+                        i.putExtra(Constants.FSUser.birthDateField, birthDate);
+                        i.putExtra(Constants.FSUser.roleField, role);
+                        i.putExtra(Constants.FSUser.transportationType, transportationType);
+                        i.putExtra(Constants.FSUser.vehiclePlateNumber, vehiclePlateNumber);
+                        startActivity(i);
+                        finish();
+                    }
                 }
             }
         });
     }
 
-    //Check if one of the input is empty
-    private boolean checkEmptyInput(String username, String phone, String birthDate) {
-        return username.isEmpty() || phone.isEmpty() || birthDate.length() < 10
+    private boolean checkEmptyInputClient(String username, String email, String birthDate) {
+        return username.isEmpty() || email.isEmpty() || birthDate.length() < 9
                 || birthDate.contains("D") || birthDate.contains("M") || birthDate.contains("Y");
     }
+
+    private boolean checkEmptyInputDriver(String username, String email, String birthDate, String vehiclePlateNumber){
+        return username.isEmpty() || email.isEmpty() || birthDate.length() < 9
+                || birthDate.contains("D") || birthDate.contains("M") || birthDate.contains("Y") || vehiclePlateNumber.isEmpty() ;
+    }
+
 
     //date picker dialog for birthday
     private void setDatePickerBtnAction() {

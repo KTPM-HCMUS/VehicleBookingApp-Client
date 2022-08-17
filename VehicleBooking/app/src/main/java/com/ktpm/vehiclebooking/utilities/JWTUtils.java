@@ -2,7 +2,7 @@ package com.ktpm.vehiclebooking.utilities;
 
 import android.util.Base64;
 
-import com.ktpm.vehiclebooking.model.UserPayload;
+import com.ktpm.vehiclebooking.model.User;
 
 import org.json.JSONObject;
 
@@ -30,24 +30,21 @@ public class JWTUtils {
         return new String(decodedBytes, "UTF-8");
     }
 
-    public static UserPayload parseTokenToGetDriver(String token){
-        UserPayload userPayload = null;
+    public static User parseTokenToGetUser(String token){
+        User user = null;
         try {
             JSONObject s = JWTUtils.decoded(token);
             String userID = s.getString("userId");
             String userName = s.getString("userName");
-            String dob = s.getString("dob");
+            String birthDate = s.getString("dob");
             int role = s.getInt("role");
-            Date birthDate;
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            birthDate = df.parse(dob);
             String email = s.getString("email");
             int transportationtype = s.getInt("type");
             String vehicleplatenumber = s.getString("vehicle_plate");
-            userPayload = new UserPayload(userID, userName, birthDate, email, role, transportationtype, vehicleplatenumber );
+            user = new User(userID, userName, birthDate, email, role, transportationtype, vehicleplatenumber);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return userPayload;
+        return user;
     }
 }

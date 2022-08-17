@@ -35,14 +35,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.205">
 
+
         <EditText
-            android:id="@+id/registerFinalEmailEditText"
+            android:id="@+id/registerFinalPhoneEditText"
             android:layout_width="306dp"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
             android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
+            android:hint="Phone Number (as User ID)"
+            android:inputType="phone"
             android:padding="10dp" />
 
         <EditText

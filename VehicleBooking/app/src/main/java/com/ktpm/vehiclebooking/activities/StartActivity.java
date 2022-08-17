@@ -1,5 +1,7 @@
 package com.ktpm.vehiclebooking.activities;
 
+import static retrofit2.Response.success;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,7 +13,6 @@ import com.ktpm.vehiclebooking.R;
 
 public class StartActivity extends AppCompatActivity {
     Button loginActivityBtn, registerActivityBtn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

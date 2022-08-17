@@ -220,7 +220,7 @@ public class UserProfileFragment extends Fragment {
 
         nameEditText.setText(currentUserObject.getUsername());
         emailEditText.setText(currentUserObject.getEmail());
-        phoneEditText.setText(currentUserObject.getPhone());
+        phoneEditText.setText(currentUserObject.getUserID());
         dateOfBirthEditText.setText(df.format(currentUserObject.getBirthDate()));
     }
 
