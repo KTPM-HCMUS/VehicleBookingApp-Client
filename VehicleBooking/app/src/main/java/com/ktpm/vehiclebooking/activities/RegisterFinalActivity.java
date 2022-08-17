@@ -24,7 +24,7 @@ public class RegisterFinalActivity extends AppCompatActivity {
 
     Button backBtn, registerBtn;
     EditText phoneEditText, passwordEditText;
-    private String userID, email, username, birthDate, vehiclePlateNumber;
+    private String email, username, birthDate, vehiclePlateNumber;
     private int role, transportationType;
     private DBHandler dbHandler = new DBHandler(RegisterFinalActivity.this);
 
@@ -92,8 +92,12 @@ public class RegisterFinalActivity extends AppCompatActivity {
                         if(response.isSuccessful()){
                             try {
                                 String isValid = response.body().getResult().getLoginError();
+                                System.out.println(isValid);
                                 String refreshToken = response.body().getResult().getRefreshToken();
+                                System.out.println();
                                 String token = response.body().getResult().getToken();
+                                System.out.println(token);
+                                System.out.println();
                                 User user = JWTUtils.parseTokenToGetUser(token);
                                 if(isValid.equals("SUCCESS")){
                                     writeDB(refreshToken, token, isValid);

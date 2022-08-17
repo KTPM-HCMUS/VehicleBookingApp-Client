@@ -67,8 +67,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void LoginWithUserIdAndPassword(String phoneNumber, String password){
-        LoginModel driver = new LoginModel(phoneNumber, password);
-        LoginAPI.apiService.login(driver).enqueue(new Callback<ResponseTT>() {
+        LoginModel user = new LoginModel(phoneNumber, password);
+        LoginAPI.apiService.login(user).enqueue(new Callback<ResponseTT>() {
             @Override
             public void onResponse(Call<ResponseTT> call, Response<ResponseTT> response) {
                 success(response);

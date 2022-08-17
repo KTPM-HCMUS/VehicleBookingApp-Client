@@ -41,5 +41,4 @@ public class MyClusterItem implements ClusterItem {
         return iconBitMapDescriptor;
     }
 
-
 }

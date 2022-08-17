@@ -4,7 +4,7 @@ package com.ktpm.vehiclebooking.model;
 import java.util.Date;
 
 public class User {
-    private String userID;
+    private String userId;
     private String password;
     private String username;
     private String birthDate;
@@ -18,7 +18,7 @@ public class User {
     }
 
     public User(String userid, String password, String username, String birthDate, String email, int role, int transportationType, String vehiclePlateNumber){
-        this.userID = userid;
+        this.userId = userid;
         this.password = password;
         this.username = username;
         this.birthDate = birthDate;
@@ -29,7 +29,7 @@ public class User {
     }
 
     public User(String userid, String username, String birthDate, String email, int role, int transportationType, String vehiclePlateNumber){
-        this.userID = userid;
+        this.userId = userid;
         this.username = username;
         this.birthDate = birthDate;
         this.email = email;
@@ -38,11 +38,11 @@ public class User {
         this.vehiclePlateNumber = vehiclePlateNumber;
     }
     public String getUserID() {
-        return userID;
+        return userId;
     }
 
     public void setUserID(String userid) {
-        this.userID = userid;
+        this.userId = userid;
     }
 
     public String getPassword() {
