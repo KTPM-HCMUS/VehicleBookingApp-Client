@@ -64,7 +64,7 @@ public class Constants {
     public static class ToastMessage {
         public static final String emptyInputError = "Please fill in your account authentication.";
         public static final String signInSuccess = "Sign in successfully!";
-        public static final String signInFailure = "Invalid email/password!";
+        public static final String signInFailure = "Invalid account!";
         public static final String registerSuccess = "Successfully registered";
         public static final String registerFailure = "Authentication failed, email must be unique and has correct form!";
         public static final String retrieveUsersInfoFailure = "Error querying for all users' information!";

@@ -38,14 +38,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         linkViewElements();
-//        setBackBtnAction();
         setRegisterTextViewAction();
         setLoginBtnAction();
     }
 
     //Get View variables from xml id
     private void linkViewElements() {
-//        backBtn = findViewById(R.id.loginBackBtn);
         loginBtn = findViewById(R.id.loginLoginBtn);
         phoneEditText = findViewById(R.id.loginEmailEditText);
         passwordEditText = findViewById(R.id.loginPasswordEditText);
@@ -60,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
                 final String phone = phoneEditText.getText().toString();
                 final String password = passwordEditText.getText().toString();
 
-                //Check if the input email or password is empty
                 if (phone.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, Constants.ToastMessage.emptyInputError,
                             Toast.LENGTH_SHORT).show();
@@ -128,8 +125,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void success(Response<ResponseTT> response){
+        System.out.println("aaaaaa");
         ArrayList<String> s = handler.readDB();
         UserPayload userPayload = JWTUtils.parseTokenToGetDriver(response.body().getResult().getToken());
+        System.out.println(userPayload);
         try {
             String isValid = response.body().getResult().getLoginError();
             String refreshToken = response.body().getResult().getRefreshToken();
@@ -153,7 +152,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void failure(){
-        Toast.makeText(LoginActivity.this, "Login failure!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, Constants.ToastMessage.signInFailure,
+                Toast.LENGTH_SHORT).show();
     }
 
     public void writeDB(String refreshToken, String token, String isValid){

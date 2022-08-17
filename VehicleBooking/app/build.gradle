@@ -7,6 +7,9 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
     defaultConfig {
         applicationId "com.ktpm.vehiclebooking"
         minSdkVersion 21
