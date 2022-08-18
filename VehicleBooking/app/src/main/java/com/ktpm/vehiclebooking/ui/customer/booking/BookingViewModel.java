@@ -10,10 +10,9 @@ public class BookingViewModel extends ViewModel {
     private MutableLiveData<User> currentUserObject;
     private MutableLiveData<Place> customerSelectedDropOffPlace;
     private MutableLiveData<Place> customerSelectedPickupPlace;
-    private MutableLiveData<String> transportationType;
+    private MutableLiveData<Integer> transportationType;
     private MutableLiveData<Boolean> bookBtnPressed;
     private MutableLiveData<Boolean> cancelBookingBtnPressed;
-    private MutableLiveData<Integer> feedBackRating;
 
     public BookingViewModel() {
         currentUserObject = new MutableLiveData<>();
@@ -24,11 +23,11 @@ public class BookingViewModel extends ViewModel {
         cancelBookingBtnPressed = new MutableLiveData<>();
     }
 
-    public MutableLiveData<String> getTransportationType() {
+    public MutableLiveData<Integer> getTransportationType() {
         return transportationType;
     }
 
-    public void setTransportationType(String transportationType) {
+    public void setTransportationType(int transportationType) {
         this.transportationType.setValue(transportationType);
     }
 
@@ -50,10 +49,6 @@ public class BookingViewModel extends ViewModel {
 
     public void setCancelBookingBtnPressed(Boolean cancelBookingBtnPressed) {
         this.cancelBookingBtnPressed.setValue(cancelBookingBtnPressed);
-    }
-
-    public void setFeedBackRating(Integer feedBackRating) {
-        this.feedBackRating.setValue(feedBackRating);
     }
 
     public MutableLiveData<Place> getCustomerSelectedPickupPlace() {

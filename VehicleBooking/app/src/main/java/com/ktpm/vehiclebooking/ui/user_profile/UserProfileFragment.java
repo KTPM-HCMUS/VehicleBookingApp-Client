@@ -77,7 +77,6 @@ public class UserProfileFragment extends Fragment {
         changePassBtn = rootView.findViewById(R.id.btn_changePass);
     }
 
-    //date picker dialog for birthday
     private void setDatePickerBtnAction() {
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
@@ -101,7 +100,6 @@ public class UserProfileFragment extends Fragment {
 
     }
 
-    //Validation after input birth date in the edit text
     private void setBirthDateEditTextAutoFormat() {
 
         dateOfBirthEditText.addTextChangedListener(new TextWatcher() {
@@ -176,9 +174,7 @@ public class UserProfileFragment extends Fragment {
         });
     }
 
-    /**
-     * Send intent to open photo gallery
-     */
+
     private void handleProfileImageClick() {
         profileImgView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +182,6 @@ public class UserProfileFragment extends Fragment {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent, 1000);            }
         });
-
     }
 
     @Override
@@ -212,22 +207,16 @@ public class UserProfileFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Render user info to view
-     */
-    private void renderUserDetails() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
+    private void renderUserDetails() {
         nameEditText.setText(currentUserObject.getname());
         emailEditText.setText(currentUserObject.getEmail());
         phoneEditText.setText(currentUserObject.getUserID());
-        dateOfBirthEditText.setText(df.format(currentUserObject.getdob()));
+        dateOfBirthEditText.setText(currentUserObject.getdob());
     }
 
 
-    /**
-     * Set change password button event listener
-     */
+
     private void setChangePasswordBtnHandler() {
         changePassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,9 +226,6 @@ public class UserProfileFragment extends Fragment {
         });
     }
 
-    /**
-     * set update button event handler
-     */
     private void setUpdateBtnHandler() {
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +246,6 @@ public class UserProfileFragment extends Fragment {
                 userData.put(Constants.FSUser.usernameField, nameEditText.getText().toString());
                 userData.put(Constants.FSUser.phoneField, phoneEditText.getText().toString());
                 userData.put(Constants.FSUser.birthDateField, birthDateNew);
-
             }
         });
 
@@ -269,7 +254,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        setImageFromFirebase();
         handleProfileImageClick();
         setChangePasswordBtnHandler();
         setUpdateBtnHandler();

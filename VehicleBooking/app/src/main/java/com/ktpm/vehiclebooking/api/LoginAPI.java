@@ -22,7 +22,7 @@ public interface LoginAPI {
             .setDateFormat("dd-MM-yyyy")
             .create();
     LoginAPI apiService = new Retrofit.Builder()
-            .baseUrl("http://34.72.120.102:8080/")
+            .baseUrl("http://34.121.234.226:8080/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(LoginAPI.class);

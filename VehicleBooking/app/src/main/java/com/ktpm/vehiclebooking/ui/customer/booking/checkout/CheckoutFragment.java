@@ -22,7 +22,7 @@ import com.ktpm.vehiclebooking.ui.customer.booking.BookingViewModel;
 public class CheckoutFragment extends Fragment {
 
     private CheckoutViewModel mViewModel;
-    private String transportationType;
+    private Integer transportationType;
     private String distanceInKmString;
     private String priceInVNDString;
 
@@ -60,10 +60,6 @@ public class CheckoutFragment extends Fragment {
         });
     }
 
-    /**
-     * Link view elements from xml file
-     * @param rootView
-     */
     private void linkViewElements(View rootView){
         carCardView = rootView.findViewById(R.id.carCardView);
         bikeCardView = rootView.findViewById(R.id.bikeCardView);
@@ -106,9 +102,9 @@ public class CheckoutFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(requireActivity()).get(CheckoutViewModel.class);
 
-        mViewModel.getTransportationType().observe(getViewLifecycleOwner(), new Observer<String>() {
+        mViewModel.getTransportationType().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(String s) {
+            public void onChanged(Integer s) {
                 if (s == null) return;
                 transportationType = s;
                 hideAccordingCardView();

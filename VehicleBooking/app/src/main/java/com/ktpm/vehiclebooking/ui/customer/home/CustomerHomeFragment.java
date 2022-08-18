@@ -15,6 +15,9 @@ import androidx.navigation.Navigation;
 import com.ktpm.vehiclebooking.Constants;
 import com.ktpm.vehiclebooking.R;
 import com.ktpm.vehiclebooking.model.User;
+import com.ktpm.vehiclebooking.ui.customer.booking.BookingViewModel;
+import com.ktpm.vehiclebooking.ui.customer.booking.checkout.CheckoutViewModel;
+
 public class CustomerHomeFragment extends Fragment {
     private CustomerHomeViewModel customerHomeViewModel;
     private ImageButton bikeBtn;
@@ -44,7 +47,11 @@ public class CustomerHomeFragment extends Fragment {
         bikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                CheckoutViewModel checkoutViewModel = ViewModelProviders.of(requireActivity()).get(CheckoutViewModel.class);
+                checkoutViewModel.setTransportationType(Constants.Transportation.Type.bikeType);
+                BookingViewModel bookingViewModel = ViewModelProviders.of(requireActivity()).get(BookingViewModel.class);
+                bookingViewModel.setTransportationType(Constants.Transportation.Type.bikeType);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_customer_booking);
             }
         });
     }
@@ -53,7 +60,11 @@ public class CustomerHomeFragment extends Fragment {
         carBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                CheckoutViewModel checkoutViewModel = ViewModelProviders.of(requireActivity()).get(CheckoutViewModel.class);
+                checkoutViewModel.setTransportationType(Constants.Transportation.Type.carType);
+                BookingViewModel bookingViewModel = ViewModelProviders.of(requireActivity()).get(BookingViewModel.class);
+                bookingViewModel.setTransportationType(Constants.Transportation.Type.carType);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_customer_booking);
             }
         });
     }

@@ -61,7 +61,6 @@ public class DropoffFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dropoff, container, false);
-        //linkViewElements()
         initGooglePlacesAutocomplete();
         setActionHandlers();
         return view;

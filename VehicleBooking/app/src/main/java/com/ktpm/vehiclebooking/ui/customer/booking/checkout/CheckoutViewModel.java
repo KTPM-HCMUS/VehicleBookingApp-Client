@@ -10,7 +10,7 @@ import com.ktpm.vehiclebooking.model.User;
  */
 public class CheckoutViewModel extends ViewModel {
     private MutableLiveData<User> currentUserObject;
-    private MutableLiveData<String> transportationType;
+    private MutableLiveData<Integer> transportationType;
     private MutableLiveData<String> distanceInKmString;
     private MutableLiveData<String> priceInVNDString;
 
@@ -25,7 +25,7 @@ public class CheckoutViewModel extends ViewModel {
         this.currentUserObject.setValue(currentUserObject);
     }
 
-    public void setTransportationType(String transportationType) {
+    public void setTransportationType(int transportationType) {
         this.transportationType.setValue(transportationType);
     }
 
@@ -49,7 +49,7 @@ public class CheckoutViewModel extends ViewModel {
         return this.currentUserObject;
     }
 
-    public MutableLiveData<String> getTransportationType() {
+    public MutableLiveData<Integer> getTransportationType() {
         return transportationType;
     }
 }

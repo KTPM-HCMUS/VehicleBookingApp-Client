@@ -31,7 +31,6 @@ public class PickupFragment extends Fragment {
     private com.ktpm.vehiclebooking.ui.customer.booking.pickup.PickupViewModel mViewModel;
 
 
-    //Places autocomplete
     private PlacesClient placesClient;
     private AutocompleteSupportFragment autocompleteFragment;
 
@@ -44,7 +43,6 @@ public class PickupFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pickup, container, false);
-        //linkViewElements(view)
         initGooglePlacesAutocomplete();
         setActionHandlers();
 
@@ -55,25 +53,14 @@ public class PickupFragment extends Fragment {
         setPlaceSelectedActionHandler();
     }
 
-
-    /**
-     * Init GooglePlacesAutocomplete search bar
-     */
     private void initGooglePlacesAutocomplete() {
-        //Init the SDK
         String apiKey = getString(R.string.google_maps_key);
-
         if (!Places.isInitialized()) {
             Places.initialize(requireActivity().getApplicationContext(), apiKey);
         }
-
         this.placesClient = Places.createClient(requireActivity().getApplicationContext());
-
-        // Initialize the AutocompleteSupportFragment.
         autocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.maps_place_autocomplete_fragment);
-
-        // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(
                 Arrays.asList(
                         Place.Field.ID,
@@ -91,15 +78,10 @@ public class PickupFragment extends Fragment {
         autocompleteFragment.setOnPlaceSelectedListener(null);
     }
 
-    /**
-     * Set up a PlaceSelectionListener to handle the response
-     */
     private void setPlaceSelectedActionHandler() {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NotNull Place place) {
-//                smoothlyMoveCameraToPosition(place.getLatLng(), Constants.GoogleMaps.CameraZoomLevel.betweenCityAndStreets);
-                //Send customer selected drop off place to booking fragment
                 BookingViewModel bookingViewModel = ViewModelProviders.of(requireActivity()).get(BookingViewModel.class);
                 bookingViewModel.setCustomerSelectedPickupPlace(place);
             }
@@ -116,9 +98,6 @@ public class PickupFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(com.ktpm.vehiclebooking.ui.customer.booking.pickup.PickupViewModel.class);
-
-
     }
-
 
 }

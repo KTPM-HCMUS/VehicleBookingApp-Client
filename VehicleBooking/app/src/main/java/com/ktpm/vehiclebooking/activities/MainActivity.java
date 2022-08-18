@@ -48,10 +48,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initCurrentUserInfo();
         linkViewElements();
         initAllChildFragmentsViewModel();
-
+        initCurrentUserInfo();
+        setNavHeaderEmailAndUsername();
+        setAllChildFragmentsViewModelData();
+        navigationDrawerSetup();
     }
 
     private void linkViewElements() {
@@ -76,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
         navigateAndHideAccordingMenuBasedOnRole(navController);
     }
 
@@ -101,9 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initCurrentUserInfo(){
         this.currentUserObject = getCurrentUserObject();
-        setNavHeaderEmailAndUsername();
-        setAllChildFragmentsViewModelData();
-        navigationDrawerSetup();
     }
 
     private User getCurrentUserObject() {
