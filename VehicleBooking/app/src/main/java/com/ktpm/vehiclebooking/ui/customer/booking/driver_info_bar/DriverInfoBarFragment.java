@@ -49,9 +49,9 @@ public class DriverInfoBarFragment extends Fragment {
     }
 
     private void setDriverInfo(User driver) {
-        driverUsernameTextView.setText(driver.getUsername());
-        plateNumberTextView.setText(driver.getVehiclePlateNumber());
-        transportationTypeTextView.setText(driver.getTransportationType());
+        driverUsernameTextView.setText(driver.getname());
+        plateNumberTextView.setText(driver.getvehicle_plate());
+        transportationTypeTextView.setText(driver.gettype());
         ratingBar.setRating(getRatingAverage(driver));
         setProfileImage();
     }

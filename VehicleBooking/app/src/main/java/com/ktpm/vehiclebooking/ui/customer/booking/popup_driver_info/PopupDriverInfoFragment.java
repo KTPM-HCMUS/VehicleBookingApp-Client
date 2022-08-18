@@ -52,8 +52,8 @@ public class PopupDriverInfoFragment extends DialogFragment {
 
     @SuppressLint("SetTextI18n")
     private void setDriverInfo(){
-        driverUsernameTextView.setText(driver.getUsername());
-        plateNumberAndBike.setText(driver.getVehiclePlateNumber() + " ● " + driver.getTransportationType());
+        driverUsernameTextView.setText(driver.getname());
+        plateNumberAndBike.setText(driver.getvehicle_plate() + " ● " + driver.gettype());
         ratingBar.setRating(getRatingAverage(driver));
         setProfileImage();
     }

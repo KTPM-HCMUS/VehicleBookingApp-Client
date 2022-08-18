@@ -218,10 +218,10 @@ public class UserProfileFragment extends Fragment {
     private void renderUserDetails() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
-        nameEditText.setText(currentUserObject.getUsername());
+        nameEditText.setText(currentUserObject.getname());
         emailEditText.setText(currentUserObject.getEmail());
         phoneEditText.setText(currentUserObject.getUserID());
-        dateOfBirthEditText.setText(df.format(currentUserObject.getBirthDate()));
+        dateOfBirthEditText.setText(df.format(currentUserObject.getdob()));
     }
 
 

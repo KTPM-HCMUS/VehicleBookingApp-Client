@@ -53,8 +53,8 @@ public class PopupDriverArrivalFragment extends DialogFragment {
 
     @SuppressLint("SetTextI18n")
     private void setDriverInfo(User driver){
-        driverUsernameTextView.setText(driver.getUsername());
-        vehicleInfo.setText(driver.getVehiclePlateNumber() + " ● " + driver.getTransportationType());
+        driverUsernameTextView.setText(driver.getname());
+        vehicleInfo.setText(driver.getvehicle_plate() + " ● " + driver.gettype());
 
     }
 

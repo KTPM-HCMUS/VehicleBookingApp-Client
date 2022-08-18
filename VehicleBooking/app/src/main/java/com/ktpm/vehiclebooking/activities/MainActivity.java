@@ -48,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initCurrentUserInfo();
         linkViewElements();
-        currentUserObject = getCurrentUserObject();
         initAllChildFragmentsViewModel();
+
     }
 
     private void linkViewElements() {
@@ -98,6 +99,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void initCurrentUserInfo(){
+        this.currentUserObject = getCurrentUserObject();
+        setNavHeaderEmailAndUsername();
+        setAllChildFragmentsViewModelData();
+        navigationDrawerSetup();
+    }
 
     private User getCurrentUserObject() {
         User user = null;
@@ -130,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setNavHeaderEmailAndUsername() {
         navHeaderEmailTextView.setText(currentUserObject.getEmail());
-        navHeaderUsernameTextView.setText(currentUserObject.getUsername());
+        navHeaderUsernameTextView.setText(currentUserObject.getname());
     }
 
     private void setAllChildFragmentsViewModelData() {

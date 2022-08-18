@@ -123,7 +123,6 @@ public class RegisterActivity extends AppCompatActivity {
                 System.out.println(vehiclePlateNumber);
                 if (customerRadioBtn.isChecked()){
                     if (checkEmptyInputClient(username, email, birthDate)) {
-                        System.out.println("aaaaaaa");
                         Toast.makeText(RegisterActivity.this, Constants.ToastMessage.emptyInputError, Toast.LENGTH_SHORT).show();
                     } else {
                         Intent i = new Intent(RegisterActivity.this, RegisterFinalActivity.class);

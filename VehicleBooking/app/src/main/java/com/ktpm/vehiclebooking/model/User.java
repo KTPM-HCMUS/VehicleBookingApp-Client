@@ -7,36 +7,36 @@ import java.util.Date;
 public class User implements Serializable {
     private String userId;
     private String password;
-    private String username;
-    private String birthDate;
+    private String name;
+    private String dob;
     private String email;
     private int role;
-    private int transportationType;
-    private String vehiclePlateNumber;
+    private int type;
+    private String vehicle_plate;
 
 
     public User() {
     }
 
-    public User(String userid, String password, String username, String birthDate, String email, int role, int transportationType, String vehiclePlateNumber){
+    public User(String userid, String password, String name, String dob, String email, int role, int type, String vehicle_plate){
         this.userId = userid;
         this.password = password;
-        this.username = username;
-        this.birthDate = birthDate;
+        this.name = name;
+        this.dob = dob;
         this.email = email;
         this.role = role;
-        this.transportationType = transportationType;
-        this.vehiclePlateNumber = vehiclePlateNumber;
+        this.type = type;
+        this.vehicle_plate = vehicle_plate;
     }
 
-    public User(String userid, String username, String birthDate, String email, int role, int transportationType, String vehiclePlateNumber){
+    public User(String userid, String name, String dob, String email, int role, int type, String vehicle_plate){
         this.userId = userid;
-        this.username = username;
-        this.birthDate = birthDate;
+        this.name = name;
+        this.dob = dob;
         this.email = email;
         this.role = role;
-        this.transportationType = transportationType;
-        this.vehiclePlateNumber = vehiclePlateNumber;
+        this.type = type;
+        this.vehicle_plate = vehicle_plate;
     }
     public String getUserID() {
         return userId;
@@ -54,20 +54,20 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getname() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setname(String name) {
+        this.name = name;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getdob() {
+        return dob;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setdob(String dob) {
+        this.dob = dob;
     }
 
     public int getRole() {
@@ -86,20 +86,20 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public int getTransportationType() {
-        return transportationType;
+    public int gettype() {
+        return type;
     }
 
-    public void setTransportationType(int type) {
-        this.transportationType = type;
+    public void settype(int type) {
+        this.type = type;
     }
 
-    public String getVehiclePlateNumber() {
-        return vehiclePlateNumber;
+    public String getvehicle_plate() {
+        return vehicle_plate;
     }
 
-    public void setVehiclePlateNumber(String vehicleplatenumber) {
-        this.vehiclePlateNumber = vehicleplatenumber;
+    public void setvehicle_plate(String vehicle_plate) {
+        this.vehicle_plate = vehicle_plate;
     }
 
 }
