@@ -1,14 +1,18 @@
-package com.ktpm.vehiclebooking.ui.customer.home;
+package com.ktpm.vehiclebooking.ui.customer.booking.pickup;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ktpm.vehiclebooking.model.User;
 
-public class CustomerHomeViewModel extends ViewModel {
+/**
+ * View model for PickUpFragment
+ */
+public class PickupViewModel extends ViewModel {
     private MutableLiveData<User> currentUserObject;
 
-    public CustomerHomeViewModel() {
+
+    public PickupViewModel() {
         currentUserObject = new MutableLiveData<>();
     }
 

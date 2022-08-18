@@ -16,7 +16,6 @@ import com.ktpm.vehiclebooking.Constants;
 import com.ktpm.vehiclebooking.R;
 import com.ktpm.vehiclebooking.model.User;
 public class CustomerHomeFragment extends Fragment {
-
     private CustomerHomeViewModel customerHomeViewModel;
     private ImageButton bikeBtn;
     private ImageButton carBtn;
@@ -31,10 +30,6 @@ public class CustomerHomeFragment extends Fragment {
         return view;
     }
 
-    /**
-     * link view elements
-     * @param rootView
-     */
     private void linkViewElements(View rootView){
         bikeBtn = rootView.findViewById(R.id.bike_image_button);
         carBtn = rootView.findViewById(R.id.car_image_button);
@@ -45,9 +40,6 @@ public class CustomerHomeFragment extends Fragment {
         setCarBtnActionHandler();
     }
 
-    /**
-     * Event listener for Bike btn
-     */
     private void setBikeBtnActionHandler(){
         bikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,9 +49,6 @@ public class CustomerHomeFragment extends Fragment {
         });
     }
 
-    /**
-     * Event listener for Car btn
-     */
     private void setCarBtnActionHandler(){
         carBtn.setOnClickListener(new View.OnClickListener() {
             @Override

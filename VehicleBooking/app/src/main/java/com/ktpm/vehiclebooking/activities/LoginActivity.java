@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                 writeDB(refreshToken, token, isValid);
                 Toast.makeText(LoginActivity.this, Constants.ToastMessage.signInSuccess,
                         Toast.LENGTH_SHORT).show();
-                moveToHomePage();
+                moveToHomePage(user);
             }else{
                 if(s.size() != 0){
                     getRefreshToken(user.getUserID());
@@ -163,9 +163,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Move to user's homepage if successfully logged in
-    private void moveToHomePage() {
+    private void moveToHomePage(User user) {
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
-        i.putExtra("email", phoneEditText.getText().toString());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", user);
+        i.putExtras(bundle);
         startActivity(i);
         finish();
     }
