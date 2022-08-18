@@ -22,7 +22,6 @@ public class BookingViewModel extends ViewModel {
         transportationType = new MutableLiveData<>();
         bookBtnPressed = new MutableLiveData<>();
         cancelBookingBtnPressed = new MutableLiveData<>();
-        feedBackRating = new MutableLiveData<>();
     }
 
     public MutableLiveData<String> getTransportationType() {
@@ -77,7 +76,4 @@ public class BookingViewModel extends ViewModel {
         return cancelBookingBtnPressed;
     }
 
-    public MutableLiveData<Integer> getFeedBackRating() {
-        return feedBackRating;
-    }
 }

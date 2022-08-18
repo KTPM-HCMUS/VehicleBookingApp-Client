@@ -18,7 +18,7 @@ public interface BookingAPI {
             .baseUrl("http://34.72.120.102:8080/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
-            .create(com.ktpm.vehiclebooking.api.BookingAPI.class);
+            .create(BookingAPI.class);
 
     @POST("booking")
     Call<ResponseTT> login(@Body Booking booking);

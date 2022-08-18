@@ -1,7 +1,5 @@
 package com.ktpm.vehiclebooking.model;
-/**
- * Data model for booking
- */
+
 public class Booking {
     private String pickupPlaceAddress;
     private String dropOffPlaceAddress;
@@ -9,7 +7,7 @@ public class Booking {
     private Double pickUpPlaceLongitude;
     private Double dropOffPlaceLatitude;
     private Double dropOffPlaceLongitude;
-    private User driver;
+    private User user;
     private String distanceInKm;
     private String priceInVND;
     private String transportationType;
@@ -20,14 +18,14 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String pickupPlaceAddress, String dropOffPlaceAddress, Double pickUpPlaceLatitude, Double pickUpPlaceLongitude, Double dropOffPlaceLatitude, Double dropOffPlaceLongitude, User driver, String distanceInKm, String priceInVND, String transportationType, Boolean available, Boolean arrived, Boolean finished) {
+    public Booking(String pickupPlaceAddress, String dropOffPlaceAddress, Double pickUpPlaceLatitude, Double pickUpPlaceLongitude, Double dropOffPlaceLatitude, Double dropOffPlaceLongitude, User user, String distanceInKm, String priceInVND, String transportationType, Boolean available, Boolean arrived, Boolean finished) {
         this.pickupPlaceAddress = pickupPlaceAddress;
         this.dropOffPlaceAddress = dropOffPlaceAddress;
         this.pickUpPlaceLatitude = pickUpPlaceLatitude;
         this.pickUpPlaceLongitude = pickUpPlaceLongitude;
         this.dropOffPlaceLatitude = dropOffPlaceLatitude;
         this.dropOffPlaceLongitude = dropOffPlaceLongitude;
-        this.driver = driver;
+        this.user = user;
         this.distanceInKm = distanceInKm;
         this.priceInVND = priceInVND;
         this.transportationType = transportationType;
@@ -84,12 +82,12 @@ public class Booking {
         this.dropOffPlaceLongitude = dropOffPlaceLongitude;
     }
 
-    public User getDriver() {
-        return driver;
+    public User getuser() {
+        return user;
     }
 
-    public void setDriver(User driver) {
-        this.driver = driver;
+    public void setuser(User user) {
+        this.user = user;
     }
 
     public String getDistanceInKm() {
