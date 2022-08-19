@@ -1,45 +1,37 @@
 package com.ktpm.vehiclebooking.model;
 
 public class Booking {
-    private String pickupPlaceAddress;
+    private String addressDepart;
     private String dropOffPlaceAddress;
-    private Double pickUpPlaceLatitude;
-    private Double pickUpPlaceLongitude;
-    private Double dropOffPlaceLatitude;
-    private Double dropOffPlaceLongitude;
-    private User user;
-    private String distanceInKm;
+    private Double latitudeDepart;
+    private Double longitudeDepart;
+    private Double latitudeDestination;
+    private Double longitudeDestination;
+    private int typeOfVehicle;
+//    private String distanceInKm;
     private String priceInVND;
-    private String transportationType;
-    private Boolean available;
-    private Boolean arrived;
-    private Boolean finished;
 
     public Booking() {
     }
 
-    public Booking(String pickupPlaceAddress, String dropOffPlaceAddress, Double pickUpPlaceLatitude, Double pickUpPlaceLongitude, Double dropOffPlaceLatitude, Double dropOffPlaceLongitude, User user, String distanceInKm, String priceInVND, String transportationType, Boolean available, Boolean arrived, Boolean finished) {
-        this.pickupPlaceAddress = pickupPlaceAddress;
+    public Booking(String addressDepart, String dropOffPlaceAddress, Double latitudeDepart, Double longitudeDepart, Double latitudeDestination, Double longitudeDestination, int typeOfVehicle, String priceInVND) {
+        this.addressDepart = addressDepart;
         this.dropOffPlaceAddress = dropOffPlaceAddress;
-        this.pickUpPlaceLatitude = pickUpPlaceLatitude;
-        this.pickUpPlaceLongitude = pickUpPlaceLongitude;
-        this.dropOffPlaceLatitude = dropOffPlaceLatitude;
-        this.dropOffPlaceLongitude = dropOffPlaceLongitude;
-        this.user = user;
-        this.distanceInKm = distanceInKm;
+        this.latitudeDepart = latitudeDepart;
+        this.longitudeDepart = longitudeDepart;
+        this.latitudeDestination = latitudeDestination;
+        this.longitudeDestination = longitudeDestination;
+//        this.distanceInKm = distanceInKm;
         this.priceInVND = priceInVND;
-        this.transportationType = transportationType;
-        this.available = available;
-        this.arrived = arrived;
-        this.finished = finished;
+        this.typeOfVehicle = typeOfVehicle;
     }
 
-    public String getPickupPlaceAddress() {
-        return pickupPlaceAddress;
+    public String getaddressDepart() {
+        return addressDepart;
     }
 
-    public void setPickupPlaceAddress(String pickupPlaceAddress) {
-        this.pickupPlaceAddress = pickupPlaceAddress;
+    public void setaddressDepart(String addressDepart) {
+        this.addressDepart = addressDepart;
     }
 
     public String getDropOffPlaceAddress() {
@@ -50,54 +42,46 @@ public class Booking {
         this.dropOffPlaceAddress = dropOffPlaceAddress;
     }
 
-    public Double getPickUpPlaceLatitude() {
-        return pickUpPlaceLatitude;
+    public Double getlatitudeDepart() {
+        return latitudeDepart;
     }
 
-    public void setPickUpPlaceLatitude(Double pickUpPlaceLatitude) {
-        this.pickUpPlaceLatitude = pickUpPlaceLatitude;
+    public void setlatitudeDepart(Double latitudeDepart) {
+        this.latitudeDepart = latitudeDepart;
     }
 
-    public Double getPickUpPlaceLongitude() {
-        return pickUpPlaceLongitude;
+    public Double getlongitudeDepart() {
+        return longitudeDepart;
     }
 
-    public void setPickUpPlaceLongitude(Double pickUpPlaceLongitude) {
-        this.pickUpPlaceLongitude = pickUpPlaceLongitude;
+    public void setlongitudeDepart(Double longitudeDepart) {
+        this.longitudeDepart = longitudeDepart;
     }
 
-    public Double getDropOffPlaceLatitude() {
-        return dropOffPlaceLatitude;
+    public Double getlatitudeDestination() {
+        return latitudeDestination;
     }
 
-    public void setDropOffPlaceLatitude(Double dropOffPlaceLatitude) {
-        this.dropOffPlaceLatitude = dropOffPlaceLatitude;
+    public void setlatitudeDestination(Double latitudeDestination) {
+        this.latitudeDestination = latitudeDestination;
     }
 
-    public Double getDropOffPlaceLongitude() {
-        return dropOffPlaceLongitude;
+    public Double getlongitudeDestination() {
+        return longitudeDestination;
     }
 
-    public void setDropOffPlaceLongitude(Double dropOffPlaceLongitude) {
-        this.dropOffPlaceLongitude = dropOffPlaceLongitude;
+    public void setlongitudeDestination(Double longitudeDestination) {
+        this.longitudeDestination = longitudeDestination;
     }
 
-    public User getuser() {
-        return user;
-    }
-
-    public void setuser(User user) {
-        this.user = user;
-    }
-
-    public String getDistanceInKm() {
-        return distanceInKm;
-    }
-
-    public void setDistanceInKm(String distanceInKm) {
-        this.distanceInKm = distanceInKm;
-    }
-
+//    public String getDistanceInKm() {
+//        return distanceInKm;
+//    }
+//
+//    public void setDistanceInKm(String distanceInKm) {
+//        this.distanceInKm = distanceInKm;
+//    }
+//
     public String getPriceInVND() {
         return priceInVND;
     }
@@ -106,35 +90,11 @@ public class Booking {
         this.priceInVND = priceInVND;
     }
 
-    public String getTransportationType() {
-        return transportationType;
+    public int gettypeOfVehicle() {
+        return typeOfVehicle;
     }
 
-    public void setTransportationType(String transportationType) {
-        this.transportationType = transportationType;
-    }
-
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
-
-    public Boolean getArrived() {
-        return arrived;
-    }
-
-    public void setArrived(Boolean arrived) {
-        this.arrived = arrived;
-    }
-
-    public Boolean getFinished() {
-        return finished;
-    }
-
-    public void setFinished(Boolean finished) {
-        this.finished = finished;
+    public void settypeOfVehicle(int typeOfVehicle) {
+        this.typeOfVehicle = typeOfVehicle;
     }
 }

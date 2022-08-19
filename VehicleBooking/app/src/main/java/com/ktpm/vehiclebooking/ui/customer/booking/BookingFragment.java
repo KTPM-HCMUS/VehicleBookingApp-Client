@@ -53,9 +53,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.maps.android.clustering.ClusterManager;
 import com.ktpm.vehiclebooking.Constants;
 import com.ktpm.vehiclebooking.R;
+import com.ktpm.vehiclebooking.api.BookingAPI;
+import com.ktpm.vehiclebooking.database.DBHandler;
 import com.ktpm.vehiclebooking.model.Booking;
-import com.ktpm.vehiclebooking.model.DriverLocation;
+import com.ktpm.vehiclebooking.model.DriverBookingAccepted;
 import com.ktpm.vehiclebooking.model.GoogleMaps.MyClusterItem;
+import com.ktpm.vehiclebooking.model.ResponseTT;
 import com.ktpm.vehiclebooking.model.User;
 import com.ktpm.vehiclebooking.ui.customer.booking.checkout.CheckoutFragment;
 import com.ktpm.vehiclebooking.ui.customer.booking.checkout.CheckoutViewModel;
@@ -85,10 +88,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
     private BookingViewModel mViewModel;
-
+    DBHandler handler;
     //View elements
     private FloatingActionButton getMyLocationBtn;
     private FloatingActionButton restartBookingBtn;
@@ -146,6 +153,7 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
         linkViewElements(view);
         initMapsFragment();
         setActionHandlers();
+        handler = new DBHandler(getActivity());
         return view;
     }
 
@@ -463,8 +471,11 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                 if (aBoolean == null) return;
                 restartBookingBtn.setVisibility(View.GONE);
                 removeCurrentRoute();
-                // call api to send booking information
-                createNewBooking();
+                String token = handler.readDB().get(1);
+                Booking booking = new Booking(customerPickupPlace.getAddress(), customerDropOffPlace.getAddress(),
+                        customerPickupPlace.getLatLng().latitude, customerPickupPlace.getLatLng().longitude,
+                        customerDropOffPlace.getLatLng().latitude, customerDropOffPlace.getLatLng().longitude, transportationType, priceInVNDString);
+                createNewBooking(token, booking);
                 sendDataToProcessBookingViewModel();
                 loadProcessingBookingFragment();
             }
@@ -508,13 +519,41 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void loadCustomerRatingFragment() {
-
         FragmentManager fm = getChildFragmentManager();
     }
 
 
-    private void createNewBooking() {
+    private void createNewBooking(String token, Booking booking) {
+        BookingAPI.apiService.booking(token, booking).enqueue(new Callback<DriverBookingAccepted>() {
+            @Override
+            public void onResponse(Call<DriverBookingAccepted> call, Response<DriverBookingAccepted> response) {
+                if (response.isSuccessful()){
+                    System.out.println(response.message());
+                    if (response.body().getUserId() == null){
+                        createNewBooking(token, booking);
+                    }
+                    else {
+                        User driver = new User();
+                        driver.setUserID(response.body().getUserId());
+                        driver.setname(response.body().getName());
+                        driver.setvehicle_plate(response.body().getVehiclePlate());
+                        driver.settype(response.body().getTypeOfVehicle());
+                        driver.setRole(1);
+                        setDetectAcceptedDriver(driver);
+                    }
+                }
+                else {
+                    Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
+                    resetBookingFlow();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<DriverBookingAccepted> call, Throwable t) {
+                Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
+                resetBookingFlow();
+            }
+        });
     }
 
     private void sendDataToInfoBarViewModel() {
@@ -529,8 +568,14 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void setDetectAcceptedDriver() {
-
+    private void setDetectAcceptedDriver(User user) {
+        currentDriver = user;
+        sendDriverObjectToPopupDriverViewModel();
+        loadPopupFoundedDriverInfo();
+        setListenerForDrawingDriverMarker();
+        setListenerForDriverArrival();
+        sendDataToInfoBarViewModel();
+        loadDriverInfoBarFragment();
     }
 
     private void setListenerForDriverArrival() {
@@ -549,7 +594,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
             resourceType = R.drawable.ic_checkout_car;
         } else {
             resourceType = R.drawable.ic_checkout_bike;
-
         }
     }
 
