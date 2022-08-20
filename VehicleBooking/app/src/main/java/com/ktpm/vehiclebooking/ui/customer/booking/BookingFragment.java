@@ -87,6 +87,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -475,7 +479,23 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                 Booking booking = new Booking(customerPickupPlace.getAddress(), customerDropOffPlace.getAddress(),
                         customerPickupPlace.getLatLng().latitude, customerPickupPlace.getLatLng().longitude,
                         customerDropOffPlace.getLatLng().latitude, customerDropOffPlace.getLatLng().longitude, transportationType, priceInVNDString);
-                createNewBooking(token, booking);
+                CompletableFuture<Void> future = new CompletableFuture<Void>();
+                try {
+                    future.get(1, TimeUnit.MINUTES);
+                    createNewBooking(token,booking);
+                }
+                catch (ExecutionException e){
+                    Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
+                    resetBookingFlow();
+                }
+                catch (InterruptedException e){
+                    Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
+                    resetBookingFlow();
+                }
+                catch (TimeoutException e){
+                    Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
+                    resetBookingFlow();
+                }
                 sendDataToProcessBookingViewModel();
                 loadProcessingBookingFragment();
             }
@@ -528,7 +548,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onResponse(Call<DriverBookingAccepted> call, Response<DriverBookingAccepted> response) {
                 if (response.isSuccessful()){
-                    System.out.println(response.message());
                     if (response.body().getUserId() == null){
                         createNewBooking(token, booking);
                     }
@@ -541,10 +560,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                         driver.setRole(1);
                         setDetectAcceptedDriver(driver);
                     }
-                }
-                else {
-                    Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
-                    resetBookingFlow();
                 }
             }
 
@@ -569,6 +584,7 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void setDetectAcceptedDriver(User user) {
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
         currentDriver = user;
         sendDriverObjectToPopupDriverViewModel();
         loadPopupFoundedDriverInfo();

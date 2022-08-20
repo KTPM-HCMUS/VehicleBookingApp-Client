@@ -15,7 +15,7 @@ public interface BookingAPI {
     Gson gson = new GsonBuilder()
             .setDateFormat("dd-MM-yyyy")
             .create();
-    com.ktpm.vehiclebooking.api.BookingAPI apiService = new Retrofit.Builder()
+    BookingAPI apiService = new Retrofit.Builder()
             .baseUrl("http://api-location-v1.herokuapp.com/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
