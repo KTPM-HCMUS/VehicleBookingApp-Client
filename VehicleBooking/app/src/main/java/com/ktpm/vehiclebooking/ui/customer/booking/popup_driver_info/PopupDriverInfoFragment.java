@@ -1,7 +1,6 @@
 package com.ktpm.vehiclebooking.ui.customer.booking.popup_driver_info;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.ktpm.vehiclebooking.Constants;
 import com.ktpm.vehiclebooking.R;
 import com.ktpm.vehiclebooking.model.User;
 
@@ -53,23 +48,20 @@ public class PopupDriverInfoFragment extends DialogFragment {
     @SuppressLint("SetTextI18n")
     private void setDriverInfo(){
         driverUsernameTextView.setText(driver.getname());
-        plateNumberAndBike.setText(driver.getvehicle_plate() + " ● " + driver.gettype());
+        String typeOfVehicle = driver.gettype()==2 ? "Car" : "Bike";
+        plateNumberAndBike.setText(driver.getvehicle_plate() + " ● " + typeOfVehicle);
         ratingBar.setRating(getRatingAverage(driver));
-        setProfileImage();
     }
 
-    private void setProfileImage(){
-
-    }
 
     public float getRatingAverage(User driver) {
-       return (float) 0.0;
+       return (float) 5.0;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(requireActivity()).get(com.ktpm.vehiclebooking.ui.customer.booking.popup_driver_info.PopupDriverInfoViewModel.class);
+        mViewModel = ViewModelProviders.of(requireActivity()).get(PopupDriverInfoViewModel.class);
         mViewModel.getDriver().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {

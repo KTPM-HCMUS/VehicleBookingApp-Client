@@ -483,8 +483,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                         customerDropOffPlace.getLatLng().latitude, customerDropOffPlace.getLatLng().longitude, transportationType, priceInVNDString);
                 CompletableFuture<Void> future = CompletableFuture.runAsync(()->{
                     createNewBooking(token, booking);
-                    sendDataToProcessBookingViewModel();
-                    loadProcessingBookingFragment();
                 });
                 try {
                     future.get(30, TimeUnit.SECONDS);
@@ -501,7 +499,9 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                     Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
                     resetBookingFlow();
                 }
-
+                setDetectAcceptedDriver();
+                sendDataToProcessBookingViewModel();
+                loadProcessingBookingFragment();
             }
         });
 
@@ -548,31 +548,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void createNewBooking(String token, Booking booking) {
-//        BookingAPI.apiService.booking(token, booking).enqueue(new Callback<DriverBookingAccepted>() {
-//            @Override
-//            public void onResponse(Call<DriverBookingAccepted> call, Response<DriverBookingAccepted> response) {
-//                if (response.isSuccessful()){
-//                    if (response.body().getUserId() == null){
-//                      createNewBooking(token, booking);
-//                    }
-//                    else {
-//                        User driver = new User();
-//                        driver.setUserID(response.body().getUserId());
-//                        driver.setname(response.body().getName());
-//                        driver.setvehicle_plate(response.body().getVehiclePlate());
-//                        driver.settype(response.body().getTypeOfVehicle());
-//                        driver.setRole(1);
-//                        setDetectAcceptedDriver(driver);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<DriverBookingAccepted> call, Throwable t) {
-//                Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
-//                resetBookingFlow();
-//            }
-//        });
         try {
             Response<DriverBookingAccepted> response = BookingAPI.apiService.booking(token, booking).execute();
             if (response.body().getUserId() == null){
@@ -585,13 +560,20 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                 driver.setvehicle_plate(response.body().getVehiclePlate());
                 driver.settype(response.body().getTypeOfVehicle());
                 driver.setRole(1);
-                setDetectAcceptedDriver(driver);
+                currentDriver = driver;
             }
         }
         catch (IOException e) {
             Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
             resetBookingFlow();
         }
+//        User driver = new User();
+//        driver.setUserID("0909090901");
+//        driver.setname("chien");
+//        driver.setvehicle_plate("123AB123");
+//        driver.settype(1);
+//        driver.setRole(1);
+//        currentDriver = driver;
     }
 
     private void sendDataToInfoBarViewModel() {
@@ -606,9 +588,8 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void setDetectAcceptedDriver(User user) {
+    private void setDetectAcceptedDriver() {
         System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
-        currentDriver = user;
         sendDriverObjectToPopupDriverViewModel();
         loadPopupFoundedDriverInfo();
         setListenerForDrawingDriverMarker();
