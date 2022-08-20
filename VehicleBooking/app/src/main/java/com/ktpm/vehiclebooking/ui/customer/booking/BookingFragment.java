@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -89,9 +90,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import io.netty.util.concurrent.CompleteFuture;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,7 +106,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
     //View elements
     private FloatingActionButton getMyLocationBtn;
     private FloatingActionButton restartBookingBtn;
-
     //Maps marker clustering
     private ClusterManager<MyClusterItem> clusterManager;
 
@@ -479,10 +481,13 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                 Booking booking = new Booking(customerPickupPlace.getAddress(), customerDropOffPlace.getAddress(),
                         customerPickupPlace.getLatLng().latitude, customerPickupPlace.getLatLng().longitude,
                         customerDropOffPlace.getLatLng().latitude, customerDropOffPlace.getLatLng().longitude, transportationType, priceInVNDString);
-                CompletableFuture<Void> future = new CompletableFuture<Void>();
+                CompletableFuture<Void> future = CompletableFuture.runAsync(()->{
+                    createNewBooking(token, booking);
+                    sendDataToProcessBookingViewModel();
+                    loadProcessingBookingFragment();
+                });
                 try {
-                    future.get(1, TimeUnit.MINUTES);
-                    createNewBooking(token,booking);
+                    future.get(30, TimeUnit.SECONDS);
                 }
                 catch (ExecutionException e){
                     Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
@@ -496,8 +501,7 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                     Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
                     resetBookingFlow();
                 }
-                sendDataToProcessBookingViewModel();
-                loadProcessingBookingFragment();
+
             }
         });
 
@@ -544,31 +548,50 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void createNewBooking(String token, Booking booking) {
-        BookingAPI.apiService.booking(token, booking).enqueue(new Callback<DriverBookingAccepted>() {
-            @Override
-            public void onResponse(Call<DriverBookingAccepted> call, Response<DriverBookingAccepted> response) {
-                if (response.isSuccessful()){
-                    if (response.body().getUserId() == null){
-                        createNewBooking(token, booking);
-                    }
-                    else {
-                        User driver = new User();
-                        driver.setUserID(response.body().getUserId());
-                        driver.setname(response.body().getName());
-                        driver.setvehicle_plate(response.body().getVehiclePlate());
-                        driver.settype(response.body().getTypeOfVehicle());
-                        driver.setRole(1);
-                        setDetectAcceptedDriver(driver);
-                    }
-                }
+//        BookingAPI.apiService.booking(token, booking).enqueue(new Callback<DriverBookingAccepted>() {
+//            @Override
+//            public void onResponse(Call<DriverBookingAccepted> call, Response<DriverBookingAccepted> response) {
+//                if (response.isSuccessful()){
+//                    if (response.body().getUserId() == null){
+//                      createNewBooking(token, booking);
+//                    }
+//                    else {
+//                        User driver = new User();
+//                        driver.setUserID(response.body().getUserId());
+//                        driver.setname(response.body().getName());
+//                        driver.setvehicle_plate(response.body().getVehiclePlate());
+//                        driver.settype(response.body().getTypeOfVehicle());
+//                        driver.setRole(1);
+//                        setDetectAcceptedDriver(driver);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DriverBookingAccepted> call, Throwable t) {
+//                Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
+//                resetBookingFlow();
+//            }
+//        });
+        try {
+            Response<DriverBookingAccepted> response = BookingAPI.apiService.booking(token, booking).execute();
+            if (response.body().getUserId() == null){
+                createNewBooking(token, booking);
             }
-
-            @Override
-            public void onFailure(Call<DriverBookingAccepted> call, Throwable t) {
-                Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
-                resetBookingFlow();
+            else {
+                User driver = new User();
+                driver.setUserID(response.body().getUserId());
+                driver.setname(response.body().getName());
+                driver.setvehicle_plate(response.body().getVehiclePlate());
+                driver.settype(response.body().getTypeOfVehicle());
+                driver.setRole(1);
+                setDetectAcceptedDriver(driver);
             }
-        });
+        }
+        catch (IOException e) {
+            Toast.makeText(requireActivity(), Constants.ToastMessage.addNewBookingToDbFail, Toast.LENGTH_SHORT).show();
+            resetBookingFlow();
+        }
     }
 
     private void sendDataToInfoBarViewModel() {
