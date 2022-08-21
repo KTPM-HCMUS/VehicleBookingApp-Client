@@ -1,4 +1,4 @@
-package com.ktpm.vehiclebooking.model;
+package com.ktpm.vehiclebooking.utilities;
 
 
 import android.util.Log;

@@ -6,14 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.ktpm.vehiclebooking.LocationOuterClass;
 import com.ktpm.vehiclebooking.R;
-import com.ktpm.vehiclebooking.model.LocationStreamingClient;
-
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Loading screen activity

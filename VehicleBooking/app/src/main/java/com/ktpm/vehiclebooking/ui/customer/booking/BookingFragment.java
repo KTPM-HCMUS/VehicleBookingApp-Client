@@ -53,6 +53,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.maps.android.clustering.ClusterManager;
 import com.ktpm.vehiclebooking.Constants;
+import com.ktpm.vehiclebooking.LocationOuterClass;
 import com.ktpm.vehiclebooking.R;
 import com.ktpm.vehiclebooking.api.BookingAPI;
 import com.ktpm.vehiclebooking.database.DBHandler;
@@ -74,6 +75,8 @@ import com.ktpm.vehiclebooking.ui.customer.booking.popup_driver_info.PopupDriver
 import com.ktpm.vehiclebooking.ui.customer.booking.processing_booking.ProcessingBookingFragment;
 import com.ktpm.vehiclebooking.ui.customer.booking.processing_booking.ProcessingBookingViewModel;
 import com.ktpm.vehiclebooking.utilities.DirectionsJSONParser;
+import com.ktpm.vehiclebooking.utilities.LocationStreamingClient;
+import com.ktpm.vehiclebooking.utilities.RadiusDistanceCalculation;
 
 import org.json.JSONObject;
 
@@ -90,6 +93,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -140,6 +145,7 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
     Boolean bookBtnPressed;
     Boolean cancelBookingBtnPressed;
     User currentDriver;
+    User currentUser;
 
     public static BookingFragment newInstance() {
         return new BookingFragment();
@@ -160,8 +166,10 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
         initMapsFragment();
         setActionHandlers();
         handler = new DBHandler(getActivity());
+        currentUser = (User) getActivity().getIntent().getExtras().get("user");
         return view;
     }
+
 
 
     private void linkViewElements(View rootView) {
@@ -186,8 +194,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void resetBookingFlow() {
-        removeListenerForDrawingDriverMarker();
-        removeListenerForCurrentBooking();
         removeAllMarkers();
         removeCurrentRoute();
         loadDropOffPlacePickerFragment();
@@ -502,6 +508,7 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                 setDetectAcceptedDriver();
                 sendDataToProcessBookingViewModel();
                 loadProcessingBookingFragment();
+                setListenerForDriverRoute();
             }
         });
 
@@ -592,46 +599,64 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
         System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa");
         sendDriverObjectToPopupDriverViewModel();
         loadPopupFoundedDriverInfo();
-        setListenerForDrawingDriverMarker();
-        setListenerForDriverArrival();
         sendDataToInfoBarViewModel();
         loadDriverInfoBarFragment();
     }
 
-    private void setListenerForDriverArrival() {
 
-    }
-
-
-    private void setListenerForBookingFinished() {
-
-    }
-
-
-    private void setListenerForDrawingDriverMarker() {
+    private void setListenerForDriverRoute() {
         int resourceType;
+        LocationStreamingClient client = new LocationStreamingClient();
+        ExecutorService sendUserLocationExecutor = Executors.newSingleThreadExecutor();
+        ExecutorService getDriverLocationExecutor = Executors.newSingleThreadExecutor();
         if (transportationType.equals(Constants.Transportation.Type.carType)) {
             resourceType = R.drawable.ic_checkout_car;
         } else {
             resourceType = R.drawable.ic_checkout_bike;
         }
+        client.sendLocation(currentUser.getUserID(),() -> {
+            return LocationOuterClass.Location.newBuilder()
+                        .setLatitude(customerPickupPlace.getLatLng().latitude)
+                        .setLongitude(customerPickupPlace.getLatLng().longitude)
+                        .build();
+        }, sendUserLocationExecutor);
+        client.getLocation(currentUser.getUserID(), currentDriver.getUserID(), response->{
+            if (currentDriverLocationMarker != null) {
+                currentDriverLocationMarker.remove();
+                currentDriverLocationMarker = null;
+            }
+            currentDriverLocationMarker = mMap.addMarker(
+                    new MarkerOptions()
+                            .position(new LatLng(response.getDriverLocation().getLatitude(),
+                                    response.getDriverLocation().getLongitude()))
+                            .icon(bitmapDescriptorFromVector(
+                                    getActivity(),
+                                    resourceType, Color.RED)
+                            )
+                            .title("Driver is here!")
+            );
+            double distanceToArrival = RadiusDistanceCalculation.distance(response.getDriverLocation().getLatitude(), response.getDriverLocation().getLongitude(),
+                    response.getCustomerLocation().getLatitude(), response.getCustomerLocation().getLongitude(), 'M');
+            if (distanceToArrival < 0.05D){
+                sendDataToPopupDriverArrivalViewModel();
+                loadPopupDriverArrivalFragment();
+            }
+            double distanceToFinished = RadiusDistanceCalculation.distance(response.getDriverLocation().getLatitude(), response.getDriverLocation().getLongitude(),
+                    customerDropOffPlace.getLatLng().latitude, customerDropOffPlace.getLatLng().longitude, 'M');
+            if (distanceToFinished < 0.05D){
+                Toast.makeText(requireActivity(), "Your trip was over. Thank you", Toast.LENGTH_SHORT).show();
+                resetBookingFlow();
+                getDriverLocationExecutor.shutdown();
+            }
+        }, getDriverLocationExecutor);
     }
 
-
-    private void removeListenerForDrawingDriverMarker() {
-
-    }
 
 
     private void sendDriverObjectToPopupDriverViewModel() {
         PopupDriverInfoViewModel popupDriverInfoViewModel = ViewModelProviders.of(requireActivity()).get(PopupDriverInfoViewModel.class);
         popupDriverInfoViewModel.setDriver(currentDriver);
     }
-
-    private void removeListenerForCurrentBooking() {
-
-    }
-
 
     private void cancelBooking() {
 
