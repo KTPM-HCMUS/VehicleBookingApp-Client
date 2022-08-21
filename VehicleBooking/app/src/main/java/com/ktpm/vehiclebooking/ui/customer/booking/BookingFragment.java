@@ -647,6 +647,7 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                 Toast.makeText(requireActivity(), "Your trip was over. Thank you", Toast.LENGTH_SHORT).show();
                 resetBookingFlow();
                 getDriverLocationExecutor.shutdown();
+                sendUserLocationExecutor.shutdown();
             }
         }, getDriverLocationExecutor);
     }
