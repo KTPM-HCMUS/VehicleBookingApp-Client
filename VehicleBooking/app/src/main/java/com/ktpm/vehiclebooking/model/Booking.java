@@ -9,12 +9,12 @@ public class Booking {
     private Double longitudeDestination;
     private int typeOfVehicle;
 //    private String distanceInKm;
-    private String priceInVND;
+    private String price;
 
     public Booking() {
     }
 
-    public Booking(String addressDepart, String dropOffPlaceAddress, Double latitudeDepart, Double longitudeDepart, Double latitudeDestination, Double longitudeDestination, int typeOfVehicle, String priceInVND) {
+    public Booking(String addressDepart, String dropOffPlaceAddress, Double latitudeDepart, Double longitudeDepart, Double latitudeDestination, Double longitudeDestination, int typeOfVehicle, String price) {
         this.addressDepart = addressDepart;
         this.dropOffPlaceAddress = dropOffPlaceAddress;
         this.latitudeDepart = latitudeDepart;
@@ -22,7 +22,7 @@ public class Booking {
         this.latitudeDestination = latitudeDestination;
         this.longitudeDestination = longitudeDestination;
 //        this.distanceInKm = distanceInKm;
-        this.priceInVND = priceInVND;
+        this.price = price;
         this.typeOfVehicle = typeOfVehicle;
     }
 
@@ -83,11 +83,11 @@ public class Booking {
 //    }
 //
     public String getPriceInVND() {
-        return priceInVND;
+        return price;
     }
 
-    public void setPriceInVND(String priceInVND) {
-        this.priceInVND = priceInVND;
+    public void setPriceInVND(String price) {
+        this.price = price;
     }
 
     public int gettypeOfVehicle() {
